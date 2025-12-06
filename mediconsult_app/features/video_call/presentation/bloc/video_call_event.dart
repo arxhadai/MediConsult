@@ -1,66 +1,90 @@
 part of 'video_call_bloc.dart';
 
 /// Base event class for video call BLoC
-abstract class VideoCallEvent extends Equatable {
+abstract class VideoCallEvent {
   const VideoCallEvent();
-
-  @override
-  List<Object?> get props => [];
 }
 
-/// Event to initialize the video call service
-class InitializeVideoCall extends VideoCallEvent {
-  final String appId;
-
-  const InitializeVideoCall({required this.appId});
-
-  @override
-  List<Object?> get props => [appId];
+// Public events
+class VideoCallInitializeRequested extends VideoCallEvent {
+  final String consultationId;
+  final bool isVideoCall;
+  
+  const VideoCallInitializeRequested({
+    required this.consultationId,
+    required this.isVideoCall,
+  });
 }
 
-/// Event to join a video call
-class JoinVideoCall extends VideoCallEvent {
+class VideoCallJoinRequested extends VideoCallEvent {
   final String token;
   final String channelName;
   final int uid;
   final bool enableVideo;
-
-  const JoinVideoCall({
+  
+  const VideoCallJoinRequested({
     required this.token,
     required this.channelName,
     required this.uid,
     required this.enableVideo,
   });
-
-  @override
-  List<Object?> get props => [token, channelName, uid, enableVideo];
 }
 
-/// Event to leave the current video call
-class LeaveVideoCall extends VideoCallEvent {}
-
-/// Event to toggle audio on/off
-class ToggleAudio extends VideoCallEvent {
-  final bool enabled;
-
-  const ToggleAudio({required this.enabled});
-
-  @override
-  List<Object?> get props => [enabled];
+class VideoCallLeaveRequested extends VideoCallEvent {
+  const VideoCallLeaveRequested();
 }
 
-/// Event to toggle video on/off
-class ToggleVideo extends VideoCallEvent {
-  final bool enabled;
-
-  const ToggleVideo({required this.enabled});
-
-  @override
-  List<Object?> get props => [enabled];
+class VideoCallAudioToggled extends VideoCallEvent {
+  const VideoCallAudioToggled();
 }
 
-/// Event to switch camera
-class SwitchCamera extends VideoCallEvent {}
+class VideoCallVideoToggled extends VideoCallEvent {
+  const VideoCallVideoToggled();
+}
 
-/// Event to end consultation
-class EndConsultation extends VideoCallEvent {}
+class VideoCallCameraSwitched extends VideoCallEvent {
+  const VideoCallCameraSwitched();
+}
+
+class VideoCallEndRequested extends VideoCallEvent {
+  final String? notes;
+  
+  const VideoCallEndRequested({this.notes});
+}
+
+// Internal events
+class _VideoCallRemoteUserJoined extends VideoCallEvent {
+  final int uid;
+  
+  const _VideoCallRemoteUserJoined(this.uid);
+}
+
+class _VideoCallRemoteUserLeft extends VideoCallEvent {
+  final int uid;
+  
+  const _VideoCallRemoteUserLeft(this.uid);
+}
+
+class _VideoCallNetworkQualityChanged extends VideoCallEvent {
+  final int uid;
+  final dynamic quality; // Using dynamic to avoid import issues
+  
+  const _VideoCallNetworkQualityChanged(this.uid, this.quality);
+}
+
+class _VideoCallConnectionStateChanged extends VideoCallEvent {
+  final dynamic state; // Using dynamic to avoid import issues
+  
+  const _VideoCallConnectionStateChanged(this.state);
+}
+
+class _VideoCallError extends VideoCallEvent {
+  final String message;
+  final bool canRetry;
+  
+  const _VideoCallError(this.message, this.canRetry);
+}
+
+class _VideoCallDurationTick extends VideoCallEvent {
+  const _VideoCallDurationTick();
+}

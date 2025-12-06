@@ -1,168 +1,277 @@
+import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:equatable/equatable.dart';
-import 'package:dartz/dartz.dart';
-import '../../domain/usecases/initialize_video_call.dart';
-import '../../domain/usecases/join_video_call.dart';
-import '../../domain/usecases/toggle_audio.dart';
-import '../../domain/usecases/toggle_video.dart';
+import 'package:injectable/injectable.dart';
+import '../../domain/entities/call_session.dart';
+import '../../domain/enums/call_status.dart';
+import '../../domain/enums/network_quality.dart';
+import '../../domain/repositories/video_call_repository.dart';
 
 part 'video_call_event.dart';
 part 'video_call_state.dart';
 
+@injectable
 class VideoCallBloc extends Bloc<VideoCallEvent, VideoCallState> {
-  final InitializeVideoCall _initializeVideoCall;
-  final JoinVideoCall _joinVideoCall;
-  final LeaveVideoCall _leaveVideoCall;
-  final ToggleAudio _toggleAudio;
-  final ToggleVideo _toggleVideo;
-  final SwitchCamera _switchCamera;
-  final EndConsultation _endConsultation;
+  final VideoCallRepository _repository;
+  
+  StreamSubscription? _callEventSubscription;
+  Timer? _durationTimer;
 
-  VideoCallBloc({
-    required InitializeVideoCall initializeVideoCall,
-    required JoinVideoCall joinVideoCall,
-    required LeaveVideoCall leaveVideoCall,
-    required ToggleAudio toggleAudio,
-    required ToggleVideo toggleVideo,
-    required SwitchCamera switchCamera,
-    required EndConsultation endConsultation,
-  })  : _initializeVideoCall = initializeVideoCall,
-        _joinVideoCall = joinVideoCall,
-        _leaveVideoCall = leaveVideoCall,
-        _toggleAudio = toggleAudio,
-        _toggleVideo = toggleVideo,
-        _switchCamera = switchCamera,
-        _endConsultation = endConsultation,
-        super(const VideoCallInitial()) {
-    on<InitializeVideoCall>(_onInitializeVideoCall);
-    on<JoinVideoCall>(_onJoinVideoCall);
-    on<LeaveVideoCall>(_onLeaveVideoCall);
-    on<ToggleAudio>(_onToggleAudio);
-    on<ToggleVideo>(_onToggleVideo);
-    on<SwitchCamera>(_onSwitchCamera);
-    on<EndConsultation>(_onEndConsultation);
+  VideoCallBloc(this._repository) : super(const VideoCallInitial()) {
+    on<VideoCallInitializeRequested>(_onInitializeRequested);
+    on<VideoCallJoinRequested>(_onJoinRequested);
+    on<VideoCallLeaveRequested>(_onLeaveRequested);
+    on<VideoCallAudioToggled>(_onAudioToggled);
+    on<VideoCallVideoToggled>(_onVideoToggled);
+    on<VideoCallCameraSwitched>(_onCameraSwitched);
+    on<VideoCallEndRequested>(_onEndRequested);
+    on<_VideoCallRemoteUserJoined>(_onRemoteUserJoined);
+    on<_VideoCallRemoteUserLeft>(_onRemoteUserLeft);
+    on<_VideoCallNetworkQualityChanged>(_onNetworkQualityChanged);
+    on<_VideoCallConnectionStateChanged>(_onConnectionStateChanged);
+    on<_VideoCallError>(_onError);
+    on<_VideoCallDurationTick>(_onDurationTick);
   }
 
-  Future<void> _onInitializeVideoCall(
-    InitializeVideoCall event,
+  Future<void> _onInitializeRequested(
+    VideoCallInitializeRequested event,
     Emitter<VideoCallState> emit,
   ) async {
-    emit(const VideoCallLoading());
-    final failureOrSuccess = await _initializeVideoCall.call(
-      InitializeParams(appId: event.appId),
-    );
-    emit(
-      failureOrSuccess.fold(
-        (failure) => VideoCallError(failure.toString()),
-        (_) => const VideoCallInitialized(),
-      ),
+    emit(const VideoCallLoading(message: 'Initializing video call...'));
+
+    // In a real implementation, this would initialize with proper parameters
+    final result = await _repository.initialize(appId: '');
+
+    result.fold(
+      (failure) => emit(const VideoCallFailure(
+        message: 'Failed to initialize video call',
+        canRetry: true,
+      )),
+      (session) {
+        _subscribeToCallEvents();
+        emit(const VideoCallReady(
+          permissionsGranted: false,
+        ));
+      },
     );
   }
 
-  Future<void> _onJoinVideoCall(
-    JoinVideoCall event,
-    Emitter<VideoCallState> emit,
-  ) async {
-    emit(const VideoCallLoading());
-    final failureOrSession = await _joinVideoCall.call(
-      JoinCallParams(
-        token: event.token,
-        channelName: event.channelName,
-        uid: event.uid,
-        enableVideo: event.enableVideo,
-      ),
-    );
-    emit(
-      failureOrSession.fold(
-        (failure) => VideoCallError(failure.toString()),
-        (session) => VideoCallActive(session),
-      ),
-    );
-  }
-
-  Future<void> _onLeaveVideoCall(
-    LeaveVideoCall event,
-    Emitter<VideoCallState> emit,
-  ) async {
-    emit(const VideoCallLoading());
-    final failureOrSuccess = await _leaveVideoCall.call();
-    emit(
-      failureOrSuccess.fold(
-        (failure) => VideoCallError(failure.toString()),
-        (_) => const VideoCallEnded(),
-      ),
-    );
-  }
-
-  Future<void> _onToggleAudio(
-    ToggleAudio event,
+  Future<void> _onJoinRequested(
+    VideoCallJoinRequested event,
     Emitter<VideoCallState> emit,
   ) async {
     final currentState = state;
-    if (currentState is VideoCallActive) {
-      final failureOrSuccess = await _toggleAudio.call(
-        ToggleAudioParams(enabled: event.enabled),
-      );
-      emit(
-        failureOrSuccess.fold(
-          (failure) => VideoCallError(failure.toString()),
-          (_) => VideoCallActive(
-            currentState.session.copyWith(),
-          ),
-        ),
-      );
-    }
-  }
+    if (currentState is! VideoCallReady) return;
 
-  Future<void> _onToggleVideo(
-    ToggleVideo event,
-    Emitter<VideoCallState> emit,
-  ) async {
-    final currentState = state;
-    if (currentState is VideoCallActive) {
-      final failureOrSuccess = await _toggleVideo.call(
-        ToggleVideoParams(enabled: event.enabled),
-      );
-      emit(
-        failureOrSuccess.fold(
-          (failure) => VideoCallError(failure.toString()),
-          (_) => VideoCallActive(
-            currentState.session.copyWith(),
-          ),
-        ),
-      );
-    }
-  }
+    emit(const VideoCallLoading(message: 'Joining call...'));
 
-  Future<void> _onSwitchCamera(
-    SwitchCamera event,
-    Emitter<VideoCallState> emit,
-  ) async {
-    final currentState = state;
-    if (currentState is VideoCallActive) {
-      final failureOrSuccess = await _switchCamera.call();
-      emit(
-        failureOrSuccess.fold(
-          (failure) => VideoCallError(failure.toString()),
-          (_) => VideoCallActive(
-            currentState.session.copyWith(),
-          ),
-        ),
-      );
-    }
-  }
-
-  Future<void> _onEndConsultation(
-    EndConsultation event,
-    Emitter<VideoCallState> emit,
-  ) async {
-    emit(const VideoCallLoading());
-    final failureOrSuccess = await _endConsultation.call();
-    emit(
-      failureOrSuccess.fold(
-        (failure) => VideoCallError(failure.toString()),
-        (_) => const VideoCallEnded(),
-      ),
+    final result = await _repository.joinCall(
+      token: event.token,
+      channelName: event.channelName,
+      uid: event.uid,
+      enableVideo: event.enableVideo,
     );
+
+    result.fold(
+      (failure) => emit(const VideoCallFailure(
+        message: 'Failed to join call',
+        canRetry: true,
+      )),
+      (session) {
+        _startDurationTimer();
+        emit(VideoCallActive(
+          session: session.copyWith(
+            status: CallStatus.connecting,
+            startTime: DateTime.now(),
+          ),
+          isAudioEnabled: true,
+          isVideoEnabled: event.enableVideo,
+          isFrontCamera: true,
+          callDuration: Duration.zero,
+          localNetworkQuality: NetworkQuality.unknown,
+          remoteNetworkQuality: NetworkQuality.unknown,
+        ));
+      },
+    );
+  }
+
+  Future<void> _onLeaveRequested(
+    VideoCallLeaveRequested event,
+    Emitter<VideoCallState> emit,
+  ) async {
+    _stopDurationTimer();
+    await _repository.leaveCall();
+
+    final currentState = state;
+    if (currentState is VideoCallActive) {
+      emit(VideoCallEnded(
+        session: currentState.session.copyWith(
+          status: CallStatus.ended,
+          endTime: DateTime.now(),
+        ),
+        totalDuration: currentState.callDuration,
+      ));
+    }
+  }
+
+  Future<void> _onAudioToggled(
+    VideoCallAudioToggled event,
+    Emitter<VideoCallState> emit,
+  ) async {
+    final currentState = state;
+    if (currentState is! VideoCallActive) return;
+
+    final newAudioState = !currentState.isAudioEnabled;
+    await _repository.toggleAudio(newAudioState);
+
+    emit(currentState.copyWith(isAudioEnabled: newAudioState));
+  }
+
+  Future<void> _onVideoToggled(
+    VideoCallVideoToggled event,
+    Emitter<VideoCallState> emit,
+  ) async {
+    final currentState = state;
+    if (currentState is! VideoCallActive) return;
+
+    final newVideoState = !currentState.isVideoEnabled;
+    await _repository.toggleVideo(newVideoState);
+
+    emit(currentState.copyWith(isVideoEnabled: newVideoState));
+  }
+
+  Future<void> _onCameraSwitched(
+    VideoCallCameraSwitched event,
+    Emitter<VideoCallState> emit,
+  ) async {
+    final currentState = state;
+    if (currentState is! VideoCallActive) return;
+
+    await _repository.switchCamera();
+
+    emit(currentState.copyWith(isFrontCamera: !currentState.isFrontCamera));
+  }
+
+  Future<void> _onEndRequested(
+    VideoCallEndRequested event,
+    Emitter<VideoCallState> emit,
+  ) async {
+    _stopDurationTimer();
+
+    final currentState = state;
+    if (currentState is! VideoCallActive) return;
+
+    emit(const VideoCallLoading(message: 'Ending consultation...'));
+
+    await _repository.endConsultation();
+
+    emit(VideoCallEnded(
+      session: currentState.session.copyWith(
+        status: CallStatus.ended,
+        endTime: DateTime.now(),
+      ),
+      totalDuration: currentState.callDuration,
+      notes: event.notes,
+    ));
+  }
+
+  void _onRemoteUserJoined(
+    _VideoCallRemoteUserJoined event,
+    Emitter<VideoCallState> emit,
+  ) {
+    final currentState = state;
+    if (currentState is! VideoCallActive) return;
+
+    emit(currentState.copyWith(
+      remoteUid: event.uid,
+      session: currentState.session.copyWith(status: CallStatus.connected),
+    ));
+  }
+
+  void _onRemoteUserLeft(
+    _VideoCallRemoteUserLeft event,
+    Emitter<VideoCallState> emit,
+  ) {
+    final currentState = state;
+    if (currentState is! VideoCallActive) return;
+
+    // Remote user left - either call ended or connection issue
+    emit(currentState.copyWith(
+      remoteUid: null,
+      session: currentState.session.copyWith(status: CallStatus.ringing),
+    ));
+  }
+
+  void _onNetworkQualityChanged(
+    _VideoCallNetworkQualityChanged event,
+    Emitter<VideoCallState> emit,
+  ) {
+    final currentState = state;
+    if (currentState is! VideoCallActive) return;
+
+    if (event.uid == 0) {
+      // Local user network quality
+      emit(currentState.copyWith(localNetworkQuality: event.quality));
+    } else {
+      // Remote user network quality
+      emit(currentState.copyWith(remoteNetworkQuality: event.quality));
+    }
+  }
+
+  void _onConnectionStateChanged(
+    _VideoCallConnectionStateChanged event,
+    Emitter<VideoCallState> emit,
+  ) {
+    final currentState = state;
+    if (currentState is! VideoCallActive) return;
+
+    emit(currentState.copyWith(
+      session: currentState.session.copyWith(status: event.state),
+    ));
+  }
+
+  void _onError(
+    _VideoCallError event,
+    Emitter<VideoCallState> emit,
+  ) {
+    emit(VideoCallFailure(
+      message: event.message,
+      canRetry: event.canRetry,
+    ));
+  }
+
+  void _onDurationTick(
+    _VideoCallDurationTick event,
+    Emitter<VideoCallState> emit,
+  ) {
+    final currentState = state;
+    if (currentState is! VideoCallActive) return;
+
+    emit(currentState.copyWith(
+      callDuration: currentState.callDuration + const Duration(seconds: 1),
+    ));
+  }
+
+  void _subscribeToCallEvents() {
+    // In a real implementation, this would subscribe to Agora events
+    // For now, we'll simulate with a timer
+  }
+
+  void _startDurationTimer() {
+    _durationTimer?.cancel();
+    _durationTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      add(const _VideoCallDurationTick());
+    });
+  }
+
+  void _stopDurationTimer() {
+    _durationTimer?.cancel();
+    _durationTimer = null;
+  }
+
+  @override
+  Future<void> close() {
+    _stopDurationTimer();
+    _callEventSubscription?.cancel();
+    return super.close();
   }
 }

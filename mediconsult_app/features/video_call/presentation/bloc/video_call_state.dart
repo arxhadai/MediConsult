@@ -1,67 +1,94 @@
 part of 'video_call_bloc.dart';
 
 /// Base state class for video call BLoC
-abstract class VideoCallState extends Equatable {
+abstract class VideoCallState {
   const VideoCallState();
-
-  @override
-  List<Object?> get props => [];
 }
 
 /// Initial state
 class VideoCallInitial extends VideoCallState {
   const VideoCallInitial();
-
-  @override
-  List<Object?> get props => [];
 }
 
 /// Loading state
 class VideoCallLoading extends VideoCallState {
-  const VideoCallLoading();
-
-  @override
-  List<Object?> get props => [];
+  final String message;
+  
+  const VideoCallLoading({required this.message});
 }
 
-/// Initialized state
-class VideoCallInitialized extends VideoCallState {
-  const VideoCallInitialized();
-
-  @override
-  List<Object?> get props => [];
+/// Ready state - service initialized, permissions granted
+class VideoCallReady extends VideoCallState {
+  final bool permissionsGranted;
+  
+  const VideoCallReady({required this.permissionsGranted});
 }
 
 /// Active call state
 class VideoCallActive extends VideoCallState {
-  final dynamic session; // Will be properly typed in the bloc
-
-  const VideoCallActive(this.session);
-
-  @override
-  List<Object?> get props => [session];
-
-  @override
-  String toString() => 'VideoCallActive { session: $session }';
+  final dynamic session; // Using dynamic to avoid import issues
+  final bool isAudioEnabled;
+  final bool isVideoEnabled;
+  final bool isFrontCamera;
+  final Duration callDuration;
+  final dynamic localNetworkQuality; // Using dynamic to avoid import issues
+  final dynamic remoteNetworkQuality; // Using dynamic to avoid import issues
+  final int? remoteUid;
+  
+  const VideoCallActive({
+    required this.session,
+    required this.isAudioEnabled,
+    required this.isVideoEnabled,
+    required this.isFrontCamera,
+    required this.callDuration,
+    required this.localNetworkQuality,
+    required this.remoteNetworkQuality,
+    this.remoteUid,
+  });
+  
+  VideoCallActive copyWith({
+    dynamic session,
+    bool? isAudioEnabled,
+    bool? isVideoEnabled,
+    bool? isFrontCamera,
+    Duration? callDuration,
+    dynamic localNetworkQuality,
+    dynamic remoteNetworkQuality,
+    int? remoteUid,
+  }) {
+    return VideoCallActive(
+      session: session ?? this.session,
+      isAudioEnabled: isAudioEnabled ?? this.isAudioEnabled,
+      isVideoEnabled: isVideoEnabled ?? this.isVideoEnabled,
+      isFrontCamera: isFrontCamera ?? this.isFrontCamera,
+      callDuration: callDuration ?? this.callDuration,
+      localNetworkQuality: localNetworkQuality ?? this.localNetworkQuality,
+      remoteNetworkQuality: remoteNetworkQuality ?? this.remoteNetworkQuality,
+      remoteUid: remoteUid ?? this.remoteUid,
+    );
+  }
 }
 
 /// Ended call state
 class VideoCallEnded extends VideoCallState {
-  const VideoCallEnded();
-
-  @override
-  List<Object?> get props => [];
+  final dynamic session; // Using dynamic to avoid import issues
+  final Duration totalDuration;
+  final String? notes;
+  
+  const VideoCallEnded({
+    required this.session,
+    required this.totalDuration,
+    this.notes,
+  });
 }
 
 /// Error state
-class VideoCallError extends VideoCallState {
+class VideoCallFailure extends VideoCallState {
   final String message;
-
-  const VideoCallError(this.message);
-
-  @override
-  List<Object?> get props => [message];
-
-  @override
-  String toString() => 'VideoCallError { message: $message }';
+  final bool canRetry;
+  
+  const VideoCallFailure({
+    required this.message,
+    required this.canRetry,
+  });
 }
