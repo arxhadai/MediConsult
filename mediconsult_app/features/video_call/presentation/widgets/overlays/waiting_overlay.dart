@@ -14,7 +14,7 @@ class WaitingOverlay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: VideoCallColors.background.withOpacity(0.8),
+      color: VideoCallColors.background.withValues(alpha: 0.8),
       child: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,

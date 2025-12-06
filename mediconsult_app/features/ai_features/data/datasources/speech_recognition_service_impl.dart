@@ -9,7 +9,7 @@ import 'speech_recognition_service.dart';
 
 /// Implementation of speech recognition service
 class SpeechRecognitionServiceImpl implements SpeechRecognitionService {
-  static final logger = AppLogger;
+  static const logger = AppLogger;
   final SpeechToText _speechToText = SpeechToText();
   final StreamController<TranscriptionSegmentModel> _speechController =
       StreamController<TranscriptionSegmentModel>.broadcast();

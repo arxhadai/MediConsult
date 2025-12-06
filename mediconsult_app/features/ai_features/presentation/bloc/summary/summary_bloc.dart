@@ -10,7 +10,7 @@ part 'summary_state.dart';
 /// BLoC for summary feature
 @injectable
 class SummaryBloc extends Bloc<SummaryEvent, SummaryState> {
-  static final logger = AppLogger;
+  static const logger = AppLogger;
   final GenerateSummary _generateSummary;
 
   SummaryBloc(this._generateSummary) : super(SummaryInitial()) {

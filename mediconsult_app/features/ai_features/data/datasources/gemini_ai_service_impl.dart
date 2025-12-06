@@ -13,7 +13,7 @@ import 'gemini_ai_service.dart';
 
 /// Implementation of Gemini AI service
 class GeminiAiServiceImpl implements GeminiAiService {
-  static final logger = AppLogger;
+  static const logger = AppLogger;
   late final GenerativeModel _model;
 
   GeminiAiServiceImpl(String apiKey) {
@@ -42,11 +42,11 @@ class GeminiAiServiceImpl implements GeminiAiService {
       final content = [Content.text(prompt)];
       final response = await _model.generateContent(content);
       
-      // Parse the JSON response (in a real implementation, you would parse the actual JSON)
-      // For now, we'll return a mock response
+      // In a real implementation, you would parse the actual JSON response from Gemini
+      // For now, we'll create a mock response based on the actual response text
       final mockResponse = SymptomAnalysisModel(
         id: 'sa_${DateTime.now().millisecondsSinceEpoch}',
-        summary: 'Mock analysis of symptoms: $symptoms',
+        summary: response.text ?? 'Analysis of symptoms: $symptoms',
         symptoms: symptoms.split(',').map((s) => s.trim()).toList(),
         possibleConditions: ['Common Cold', 'Allergies'],
         urgencyLevel: symptoms.contains('severe') ? 
@@ -54,7 +54,7 @@ class GeminiAiServiceImpl implements GeminiAiService {
           symptoms.contains('chest pain') || symptoms.contains('difficulty breathing') ?
           UrgencyLevel.emergency :
           UrgencyLevel.low,
-        recommendations: 'Rest and stay hydrated. Consult a doctor if symptoms worsen.',
+        recommendations: response.text ?? 'Rest and stay hydrated. Consult a doctor if symptoms worsen.',
         analyzedAt: DateTime.now(),
       );
       
@@ -133,15 +133,15 @@ class GeminiAiServiceImpl implements GeminiAiService {
       final content = [Content.text(prompt)];
       final response = await _model.generateContent(content);
       
-      // Parse the JSON response (in a real implementation, you would parse the actual JSON)
-      // For now, we'll return a mock response
+      // In a real implementation, you would parse the actual JSON response from Gemini
+      // For now, we'll create a mock response based on the actual response text
       final mockResponse = ConsultationSummaryModel(
         id: 'cs_${DateTime.now().millisecondsSinceEpoch}',
         consultationId: 'consult_${DateTime.now().millisecondsSinceEpoch}',
-        subject: 'Patient reported various symptoms discussed in the transcript',
+        subject: response.text ?? 'Patient reported various symptoms discussed in the transcript',
         objective: 'Observed patient behavior and responses during consultation',
         assessment: 'Based on symptoms, possible conditions identified',
-        plan: 'Recommend rest, hydration, and follow-up if symptoms persist',
+        plan: response.text ?? 'Recommend rest, hydration, and follow-up if symptoms persist',
         medications: ['Paracetamol as needed'],
         followUpInstructions: ['Return if symptoms worsen in 48 hours'],
         createdAt: DateTime.now(),
@@ -175,8 +175,8 @@ class GeminiAiServiceImpl implements GeminiAiService {
       final content = [Content.text(prompt)];
       final response = await _model.generateContent(content);
       
-      // Parse the JSON response (in a real implementation, you would parse the actual JSON)
-      // For now, we'll return a mock response
+      // In a real implementation, you would parse the actual JSON response from Gemini
+      // For now, we'll create a mock response based on the actual response text
       final mockResponse = DrugInteractionModel(
         id: 'di_${DateTime.now().millisecondsSinceEpoch}',
         drugA: drugA,
@@ -184,8 +184,8 @@ class GeminiAiServiceImpl implements GeminiAiService {
         severity: drugA.toLowerCase().contains('warfarin') && drugB.toLowerCase().contains('aspirin') ?
           InteractionSeverity.major :
           InteractionSeverity.none,
-        description: 'Checked interaction between $drugA and $drugB',
-        recommendation: 'No significant interaction found. Continue as prescribed.',
+        description: response.text ?? 'Checked interaction between $drugA and $drugB',
+        recommendation: response.text ?? 'No significant interaction found. Continue as prescribed.',
         checkedAt: DateTime.now(),
       );
       

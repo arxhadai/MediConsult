@@ -15,11 +15,11 @@ part 'symptom_checker_state.dart';
 /// BLoC for symptom checker feature
 @injectable
 class SymptomCheckerBloc extends Bloc<SymptomCheckerEvent, SymptomCheckerState> {
-  static final logger = AppLogger;
+  static const logger = AppLogger;
   final AnalyzeSymptoms _analyzeSymptoms;
   final SendChatMessage _sendChatMessage;
   
-  List<ChatMessage> _chatHistory = [];
+  final List<ChatMessage> _chatHistory = [];
 
   SymptomCheckerBloc(
     this._analyzeSymptoms,

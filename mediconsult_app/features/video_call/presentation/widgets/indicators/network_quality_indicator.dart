@@ -42,7 +42,7 @@ class NetworkQualityIndicator extends StatelessWidget {
       case 4:
         return VideoCallColors.onlineGreen; // Excellent
       case 3:
-        return VideoCallColors.onlineGreen.withOpacity(0.8); // Good
+        return VideoCallColors.onlineGreen.withValues(alpha: 0.8); // Good
       case 2:
         return VideoCallColors.warningOrange; // Poor
       case 1:

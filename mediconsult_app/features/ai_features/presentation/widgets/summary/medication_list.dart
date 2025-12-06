@@ -5,9 +5,9 @@ class MedicationList extends StatelessWidget {
   final List<String> medications;
 
   const MedicationList({
-    Key? key,
+    super.key,
     required this.medications,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

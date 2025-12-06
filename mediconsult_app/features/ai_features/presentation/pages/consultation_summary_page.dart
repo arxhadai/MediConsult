@@ -8,9 +8,9 @@ class ConsultationSummaryPage extends StatefulWidget {
   final String consultationTranscript;
 
   const ConsultationSummaryPage({
-    Key? key,
+    super.key,
     required this.consultationTranscript,
-  }) : super(key: key);
+  });
 
   @override
   State<ConsultationSummaryPage> createState() => _ConsultationSummaryPageState();

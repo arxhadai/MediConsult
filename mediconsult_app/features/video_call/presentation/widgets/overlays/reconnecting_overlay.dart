@@ -14,7 +14,7 @@ class ReconnectingOverlay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: VideoCallColors.background.withOpacity(0.9),
+      color: VideoCallColors.background.withValues(alpha: 0.9),
       child: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,

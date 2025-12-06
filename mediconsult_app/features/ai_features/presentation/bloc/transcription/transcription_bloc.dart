@@ -12,7 +12,7 @@ part 'transcription_state.dart';
 /// BLoC for transcription feature
 @injectable
 class TranscriptionBloc extends Bloc<TranscriptionEvent, TranscriptionState> {
-  static final logger = AppLogger;
+  static const logger = AppLogger;
   final StartTranscription _startTranscription;
   final StopTranscription _stopTranscription;
   StreamSubscription<TranscriptionSegment>? _transcriptionSubscription;

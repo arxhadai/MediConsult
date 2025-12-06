@@ -6,10 +6,10 @@ class SymptomChip extends StatelessWidget {
   final VoidCallback? onRemoved;
 
   const SymptomChip({
-    Key? key,
+    super.key,
     required this.symptom,
     this.onRemoved,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

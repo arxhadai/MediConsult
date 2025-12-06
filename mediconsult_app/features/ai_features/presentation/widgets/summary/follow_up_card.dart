@@ -5,9 +5,9 @@ class FollowUpCard extends StatelessWidget {
   final List<String> instructions;
 
   const FollowUpCard({
-    Key? key,
+    super.key,
     required this.instructions,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

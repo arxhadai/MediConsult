@@ -7,7 +7,7 @@ import '../widgets/chat/chat_input_field.dart';
 
 /// Page for general AI chat
 class AiChatPage extends StatefulWidget {
-  const AiChatPage({Key? key}) : super(key: key);
+  const AiChatPage({super.key});
 
   @override
   State<AiChatPage> createState() => _AiChatPageState();
@@ -54,7 +54,7 @@ class _AiChatPageState extends State<AiChatPage> {
               ),
               ChatInputField(
                 onSend: _sendMessage,
-                isEnabled: !(state is SymptomCheckerLoading),
+                isEnabled: state is! SymptomCheckerLoading,
               ),
             ],
           );

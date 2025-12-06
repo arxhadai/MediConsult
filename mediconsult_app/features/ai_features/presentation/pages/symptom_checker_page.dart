@@ -9,7 +9,7 @@ import '../widgets/chat/chat_input_field.dart';
 
 /// Page for symptom checker feature
 class SymptomCheckerPage extends StatefulWidget {
-  const SymptomCheckerPage({Key? key}) : super(key: key);
+  const SymptomCheckerPage({super.key});
 
   @override
   State<SymptomCheckerPage> createState() => _SymptomCheckerPageState();
@@ -58,7 +58,7 @@ class _SymptomCheckerPageState extends State<SymptomCheckerPage> {
               ),
               ChatInputField(
                 onSend: _sendMessage,
-                isEnabled: !(state is SymptomCheckerLoading),
+                isEnabled: state is! SymptomCheckerLoading,
               ),
             ],
           );

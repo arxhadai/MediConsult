@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 /// Widget to display AI typing indicator
 class AiTypingIndicator extends StatelessWidget {
-  const AiTypingIndicator({Key? key}) : super(key: key);
+  const AiTypingIndicator({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +12,7 @@ class AiTypingIndicator extends StatelessWidget {
         margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surfaceVariant,
+          color: Theme.of(context).colorScheme.surfaceContainerHighest,
           borderRadius: BorderRadius.circular(16),
         ),
         child: Row(

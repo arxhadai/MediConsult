@@ -6,9 +6,9 @@ class UrgencyBanner extends StatelessWidget {
   final UrgencyLevel urgencyLevel;
 
   const UrgencyBanner({
-    Key? key,
+    super.key,
     required this.urgencyLevel,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

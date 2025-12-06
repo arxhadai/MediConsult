@@ -7,9 +7,9 @@ class ChatBubble extends StatelessWidget {
   final ChatMessage message;
 
   const ChatBubble({
-    Key? key,
+    super.key,
     required this.message,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class ChatBubble extends StatelessWidget {
         decoration: BoxDecoration(
           color: isUser 
               ? Theme.of(context).colorScheme.primary 
-              : Theme.of(context).colorScheme.surfaceVariant,
+              : Theme.of(context).colorScheme.secondaryContainer,
           borderRadius: BorderRadius.circular(16),
         ),
         child: Text(
@@ -31,7 +31,7 @@ class ChatBubble extends StatelessWidget {
           style: TextStyle(
             color: isUser 
                 ? Theme.of(context).colorScheme.onPrimary 
-                : Theme.of(context).colorScheme.onSurfaceVariant,
+                : Theme.of(context).colorScheme.onSecondaryContainer,
           ),
         ),
       ),
