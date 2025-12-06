@@ -1,0 +1,30 @@
+﻿Analyzing mediconsult_app...                                    
+
+   info - 'printTime' is deprecated and shouldn't be used. Use `dateTimeFormat` with `DateTimeFormat.onlyTimeAndSinceStart` or `DateTimeFormat.none` instead - core\utils\logger.dart:12:7 - deprecated_member_use
+   info - 'v' is deprecated and shouldn't be used. [Level.verbose] is being deprecated in favor of [Level.trace], use [t] instead - core\utils\logger.dart:17:13 - deprecated_member_use
+  error - Too many positional arguments: 1 expected, but 3 found - core\utils\logger.dart:33:24 - extra_positional_arguments_could_be_named
+  error - Too many positional arguments: 1 expected, but 3 found - core\utils\logger.dart:37:24 - extra_positional_arguments_could_be_named
+warning - Unused import: 'package:dartz/dartz.dart' - features\video_call\presentation\bloc\video_call_bloc.dart:3:8 - unused_import
+warning - Unused import: '../../domain/usecases/leave_video_call.dart' - features\video_call\presentation\bloc\video_call_bloc.dart:6:8 - unused_import
+warning - Unused import: '../../domain/usecases/switch_camera.dart' - features\video_call\presentation\bloc\video_call_bloc.dart:9:8 - unused_import
+warning - Unused import: '../../domain/usecases/end_consultation.dart' - features\video_call\presentation\bloc\video_call_bloc.dart:10:8 - unused_import
+warning - Unused import: '../../domain/entities/call_session.dart' - features\video_call\presentation\bloc\video_call_bloc.dart:11:8 - unused_import
+  error - The method 'call' isn't defined for the type 'InitializeVideoCall' - features\video_call\presentation\bloc\video_call_bloc.dart:55:57 - undefined_method
+  error - The method 'call' isn't defined for the type 'JoinVideoCall' - features\video_call\presentation\bloc\video_call_bloc.dart:71:51 - undefined_method
+  error - The method 'call' isn't defined for the type 'LeaveVideoCall' - features\video_call\presentation\bloc\video_call_bloc.dart:92:52 - undefined_method
+  error - The method 'call' isn't defined for the type 'ToggleAudio' - features\video_call\presentation\bloc\video_call_bloc.dart:107:51 - undefined_method
+  error - The method 'call' isn't defined for the type 'ToggleVideo' - features\video_call\presentation\bloc\video_call_bloc.dart:127:51 - undefined_method
+  error - The method 'call' isn't defined for the type 'SwitchCamera' - features\video_call\presentation\bloc\video_call_bloc.dart:147:52 - undefined_method
+  error - The method 'call' isn't defined for the type 'EndConsultation' - features\video_call\presentation\bloc\video_call_bloc.dart:164:53 - undefined_method
+  error - The name 'MyApp' isn't a class - test\widget_test.dart:16:35 - creation_with_non_type
+
+flutter : 17 issues found. (ran in 3.1s)
+At line:1 char:1
++ flutter analyze 2>&1 | Out-File -FilePath 
+FLUTTER_ANALYZE_OUTPUT.txt  ...
++ ~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (17 issu 
+   es found. (ran in 3.1s):String) [], RemoteExcept  
+  ion
+    + FullyQualifiedErrorId : NativeCommandError
+ 

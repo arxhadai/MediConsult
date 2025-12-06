@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import '../../domain/enums/network_quality.dart';
+import '../enums/network_quality.dart';
 
 /// Entity representing the quality metrics of a video call
 class CallQuality extends Equatable {

@@ -9,12 +9,12 @@ class AppLogger {
       lineLength: 50,
       colors: true,
       printEmojis: true,
-      printTime: true,
+      dateTimeFormat: DateTimeFormat.onlyTimeAndSinceStart,
     ),
   );
 
   static void verbose(dynamic message) {
-    _logger.v(message);
+    _logger.t(message);
   }
 
   static void debug(dynamic message) {
@@ -30,10 +30,10 @@ class AppLogger {
   }
 
   static void error(dynamic message, [dynamic error, StackTrace? stackTrace]) {
-    _logger.e(message, error, stackTrace);
+    _logger.e(message, error: error, stackTrace: stackTrace);
   }
 
   static void fatal(dynamic message, [dynamic error, StackTrace? stackTrace]) {
-    _logger.f(message, error, stackTrace);
+    _logger.f(message, error: error, stackTrace: stackTrace);
   }
 }

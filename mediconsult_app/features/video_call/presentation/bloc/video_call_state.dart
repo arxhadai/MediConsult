@@ -34,7 +34,7 @@ class VideoCallInitialized extends VideoCallState {
 
 /// Active call state
 class VideoCallActive extends VideoCallState {
-  final dynamic session; // Using dynamic temporarily
+  final dynamic session; // Will be properly typed in the bloc
 
   const VideoCallActive(this.session);
 

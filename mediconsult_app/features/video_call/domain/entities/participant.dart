@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import '../../domain/enums/participant_role.dart';
+import '../enums/participant_role.dart';
 
 /// Entity representing a participant in a video call
 class Participant extends Equatable {

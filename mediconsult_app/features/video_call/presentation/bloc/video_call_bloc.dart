@@ -1,14 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:dartz/dartz.dart';
-import '../../../domain/usecases/initialize_video_call.dart';
-import '../../../domain/usecases/join_video_call.dart';
-import '../../../domain/usecases/leave_video_call.dart';
-import '../../../domain/usecases/toggle_audio.dart';
-import '../../../domain/usecases/toggle_video.dart';
-import '../../../domain/usecases/switch_camera.dart';
-import '../../../domain/usecases/end_consultation.dart';
-import '../../../domain/entities/call_session.dart';
+import '../../domain/usecases/initialize_video_call.dart';
+import '../../domain/usecases/join_video_call.dart';
+import '../../domain/usecases/toggle_audio.dart';
+import '../../domain/usecases/toggle_video.dart';
 
 part 'video_call_event.dart';
 part 'video_call_state.dart';
@@ -52,7 +48,7 @@ class VideoCallBloc extends Bloc<VideoCallEvent, VideoCallState> {
     Emitter<VideoCallState> emit,
   ) async {
     emit(const VideoCallLoading());
-    final failureOrSuccess = await _initializeVideoCall(
+    final failureOrSuccess = await _initializeVideoCall.call(
       InitializeParams(appId: event.appId),
     );
     emit(
@@ -68,7 +64,7 @@ class VideoCallBloc extends Bloc<VideoCallEvent, VideoCallState> {
     Emitter<VideoCallState> emit,
   ) async {
     emit(const VideoCallLoading());
-    final failureOrSession = await _joinVideoCall(
+    final failureOrSession = await _joinVideoCall.call(
       JoinCallParams(
         token: event.token,
         channelName: event.channelName,
@@ -89,7 +85,7 @@ class VideoCallBloc extends Bloc<VideoCallEvent, VideoCallState> {
     Emitter<VideoCallState> emit,
   ) async {
     emit(const VideoCallLoading());
-    final failureOrSuccess = await _leaveVideoCall();
+    final failureOrSuccess = await _leaveVideoCall.call();
     emit(
       failureOrSuccess.fold(
         (failure) => VideoCallError(failure.toString()),
@@ -104,7 +100,7 @@ class VideoCallBloc extends Bloc<VideoCallEvent, VideoCallState> {
   ) async {
     final currentState = state;
     if (currentState is VideoCallActive) {
-      final failureOrSuccess = await _toggleAudio(
+      final failureOrSuccess = await _toggleAudio.call(
         ToggleAudioParams(enabled: event.enabled),
       );
       emit(
@@ -124,7 +120,7 @@ class VideoCallBloc extends Bloc<VideoCallEvent, VideoCallState> {
   ) async {
     final currentState = state;
     if (currentState is VideoCallActive) {
-      final failureOrSuccess = await _toggleVideo(
+      final failureOrSuccess = await _toggleVideo.call(
         ToggleVideoParams(enabled: event.enabled),
       );
       emit(
@@ -144,7 +140,7 @@ class VideoCallBloc extends Bloc<VideoCallEvent, VideoCallState> {
   ) async {
     final currentState = state;
     if (currentState is VideoCallActive) {
-      final failureOrSuccess = await _switchCamera();
+      final failureOrSuccess = await _switchCamera.call();
       emit(
         failureOrSuccess.fold(
           (failure) => VideoCallError(failure.toString()),
@@ -161,7 +157,7 @@ class VideoCallBloc extends Bloc<VideoCallEvent, VideoCallState> {
     Emitter<VideoCallState> emit,
   ) async {
     emit(const VideoCallLoading());
-    final failureOrSuccess = await _endConsultation();
+    final failureOrSuccess = await _endConsultation.call();
     emit(
       failureOrSuccess.fold(
         (failure) => VideoCallError(failure.toString()),
