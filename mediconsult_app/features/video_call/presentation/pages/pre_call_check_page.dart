@@ -10,21 +10,21 @@ class PreCallCheckPage extends StatefulWidget {
   final String doctorSpecialty;
   
   const PreCallCheckPage({
-    Key? key,
+    super.key,
     required this.consultationId,
     required this.doctorName,
     required this.doctorSpecialty,
-  }) : super(key: key);
+  });
 
   @override
   State<PreCallCheckPage> createState() => _PreCallCheckPageState();
 }
 
 class _PreCallCheckPageState extends State<PreCallCheckPage> {
-  bool _permissionsGranted = false;
-  bool _cameraReady = true;
-  bool _microphoneReady = true;
-  bool _networkGood = true;
+  final bool _permissionsGranted = false;
+  final bool _cameraReady = true;
+  final bool _microphoneReady = true;
+  final bool _networkGood = true;
 
   @override
   void initState() {
@@ -46,9 +46,9 @@ class _PreCallCheckPageState extends State<PreCallCheckPage> {
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: Text(
+        title: const Text(
           AppConstants.appName,
-          style: const TextStyle(color: Colors.white),
+          style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
       ),
@@ -85,12 +85,12 @@ class _PreCallCheckPageState extends State<PreCallCheckPage> {
                       child: Container(
                         width: 56,
                         height: 56,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: VideoCallColors.controlsBackground,
                           shape: BoxShape.circle,
                         ),
-                        child: IconButton(
-                          icon: const Icon(
+                        child: const IconButton(
+                          icon: Icon(
                             Icons.cameraswitch,
                             color: Colors.white,
                             size: 28,

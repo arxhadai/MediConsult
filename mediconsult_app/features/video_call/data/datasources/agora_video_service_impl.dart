@@ -160,7 +160,7 @@ class AgoraVideoServiceImpl implements AgoraVideoService {
     required bool enableVideo,
   }) async {
     if (!_isInitialized || _engine == null) {
-      return Left(const VideoCallFailure('Agora not initialized'));
+      return const Left(VideoCallFailure('Agora not initialized'));
     }
 
     try {
@@ -179,7 +179,7 @@ class AgoraVideoServiceImpl implements AgoraVideoService {
         token: token,
         channelId: channelName,
         uid: uid,
-        options: ChannelMediaOptions(
+        options: const ChannelMediaOptions(
           channelProfile: ChannelProfileType.channelProfileCommunication,
           clientRoleType: ClientRoleType.clientRoleBroadcaster,
         ),
@@ -195,7 +195,7 @@ class AgoraVideoServiceImpl implements AgoraVideoService {
   @override
   Future<Either<VideoCallFailure, void>> leaveChannel() async {
     if (!_isInitialized || _engine == null) {
-      return Left(const VideoCallFailure('Agora not initialized'));
+      return const Left(VideoCallFailure('Agora not initialized'));
     }
 
     try {
@@ -210,7 +210,7 @@ class AgoraVideoServiceImpl implements AgoraVideoService {
   @override
   Future<Either<VideoCallFailure, void>> setLocalAudioEnabled(bool enabled) async {
     if (!_isInitialized || _engine == null) {
-      return Left(const VideoCallFailure('Agora not initialized'));
+      return const Left(VideoCallFailure('Agora not initialized'));
     }
 
     try {
@@ -228,7 +228,7 @@ class AgoraVideoServiceImpl implements AgoraVideoService {
   @override
   Future<Either<VideoCallFailure, void>> setLocalVideoEnabled(bool enabled) async {
     if (!_isInitialized || _engine == null) {
-      return Left(const VideoCallFailure('Agora not initialized'));
+      return const Left(VideoCallFailure('Agora not initialized'));
     }
 
     try {
@@ -246,7 +246,7 @@ class AgoraVideoServiceImpl implements AgoraVideoService {
   @override
   Future<Either<VideoCallFailure, void>> switchCamera() async {
     if (!_isInitialized || _engine == null) {
-      return Left(const VideoCallFailure('Agora not initialized'));
+      return const Left(VideoCallFailure('Agora not initialized'));
     }
 
     try {
@@ -265,7 +265,7 @@ class AgoraVideoServiceImpl implements AgoraVideoService {
     int bitrate = 1500,
   }) async {
     if (!_isInitialized || _engine == null) {
-      return Left(const VideoCallFailure('Agora not initialized'));
+      return const Left(VideoCallFailure('Agora not initialized'));
     }
 
     try {

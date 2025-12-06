@@ -4,7 +4,7 @@ import '../../../../../core/constants/video_call_colors.dart';
 class LocalVideoView extends StatelessWidget {
   final bool isVisible;
   
-  const LocalVideoView({Key? key, this.isVisible = true}) : super(key: key);
+  const LocalVideoView({super.key, this.isVisible = true});
 
   @override
   Widget build(BuildContext context) {

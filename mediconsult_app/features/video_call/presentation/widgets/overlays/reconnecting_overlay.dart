@@ -6,10 +6,10 @@ class ReconnectingOverlay extends StatelessWidget {
   final int attemptCount;
   
   const ReconnectingOverlay({
-    Key? key,
+    super.key,
     this.message = 'Reconnecting...',
     this.attemptCount = 0,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

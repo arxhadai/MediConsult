@@ -13,7 +13,7 @@ class CallControlsBar extends StatelessWidget {
   final VoidCallback? onEndCall;
 
   const CallControlsBar({
-    Key? key,
+    super.key,
     this.isAudioMuted = false,
     this.isVideoMuted = false,
     this.isFrontCamera = true,
@@ -22,7 +22,7 @@ class CallControlsBar extends StatelessWidget {
     this.onSwitchCamera,
     this.onOpenChat,
     this.onEndCall,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

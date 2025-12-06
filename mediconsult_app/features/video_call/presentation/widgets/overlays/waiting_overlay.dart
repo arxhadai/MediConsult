@@ -6,10 +6,10 @@ class WaitingOverlay extends StatelessWidget {
   final bool showProgressBar;
   
   const WaitingOverlay({
-    Key? key,
+    super.key,
     this.message = 'Connecting...',
     this.showProgressBar = true,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

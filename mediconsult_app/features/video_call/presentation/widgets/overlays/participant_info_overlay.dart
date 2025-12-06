@@ -8,12 +8,12 @@ class ParticipantInfoOverlay extends StatelessWidget {
   final bool isMuted;
   
   const ParticipantInfoOverlay({
-    Key? key,
+    super.key,
     required this.participantName,
     required this.specialty,
     this.isConnected = false,
     this.isMuted = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

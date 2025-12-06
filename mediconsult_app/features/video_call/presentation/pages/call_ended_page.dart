@@ -7,11 +7,11 @@ class CallEndedPage extends StatelessWidget {
   final String? notes;
   
   const CallEndedPage({
-    Key? key,
+    super.key,
     required this.doctorName,
     required this.callDuration,
     this.notes,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class CallEndedPage extends StatelessWidget {
               // Call ended icon
               Container(
                 padding: const EdgeInsets.all(24),
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: VideoCallColors.surface,
                   shape: BoxShape.circle,
                 ),

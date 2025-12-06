@@ -9,13 +9,13 @@ class PermissionRequestDialog extends StatelessWidget {
   final String cancelText;
   
   const PermissionRequestDialog({
-    Key? key,
+    super.key,
     this.title = 'Permission Required',
     this.message = 'This app needs the following permissions to function properly:',
     this.permissions = const ['Camera', 'Microphone'],
     this.confirmText = 'Allow',
     this.cancelText = 'Deny',
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +57,7 @@ class PermissionRequestDialog extends StatelessWidget {
                 ),
               ],
             ),
-          )).toList(),
+          )),
         ],
       ),
       actions: [

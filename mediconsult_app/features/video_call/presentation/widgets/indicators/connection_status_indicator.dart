@@ -6,10 +6,10 @@ class ConnectionStatusIndicator extends StatelessWidget {
   final String statusText;
   
   const ConnectionStatusIndicator({
-    Key? key,
+    super.key,
     this.isConnected = false,
     this.statusText = 'Disconnected',
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

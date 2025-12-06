@@ -6,10 +6,10 @@ class CallTimerWidget extends StatelessWidget {
   final bool isRecording;
   
   const CallTimerWidget({
-    Key? key,
+    super.key,
     required this.duration,
     this.isRecording = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

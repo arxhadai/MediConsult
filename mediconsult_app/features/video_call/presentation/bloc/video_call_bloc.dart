@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-import '../../domain/entities/call_session.dart';
 import '../../domain/enums/call_status.dart';
 import '../../domain/enums/network_quality.dart';
 import '../../domain/repositories/video_call_repository.dart';

@@ -8,12 +8,12 @@ class EndCallConfirmationDialog extends StatelessWidget {
   final String cancelText;
   
   const EndCallConfirmationDialog({
-    Key? key,
+    super.key,
     this.title = 'End Call',
     this.message = 'Are you sure you want to end this call?',
     this.confirmText = 'End Call',
     this.cancelText = 'Cancel',
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

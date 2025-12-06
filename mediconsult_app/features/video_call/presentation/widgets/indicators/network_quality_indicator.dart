@@ -6,10 +6,10 @@ class NetworkQualityIndicator extends StatelessWidget {
   final double size;
   
   const NetworkQualityIndicator({
-    Key? key,
+    super.key,
     this.qualityLevel = 0,
     this.size = 24,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

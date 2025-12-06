@@ -9,24 +9,27 @@ import '../widgets/indicators/call_timer_widget.dart';
 import '../widgets/indicators/network_quality_indicator.dart';
 import '../widgets/overlays/waiting_overlay.dart';
 import '../widgets/dialogs/end_call_confirmation_dialog.dart';
+import '../widgets/transcription/in_call_transcription_widget.dart';
 
 class VideoCallPage extends StatefulWidget {
   final String doctorName;
   final String doctorSpecialty;
+  final bool isDoctor;
   
   const VideoCallPage({
-    Key? key,
+    super.key,
     required this.doctorName,
     required this.doctorSpecialty,
-  }) : super(key: key);
+    this.isDoctor = false,
+  });
 
   @override
   State<VideoCallPage> createState() => _VideoCallPageState();
 }
 
 class _VideoCallPageState extends State<VideoCallPage> {
-  bool _isDraggingLocalVideo = false;
   Offset _localVideoPosition = const Offset(16, 16);
+  bool _isTranscriptionExpanded = false;
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +56,10 @@ class _VideoCallPageState extends State<VideoCallPage> {
               
               // Overlays based on state
               _buildOverlays(state),
+              
+              // Transcription overlay (for doctors)
+              if (widget.isDoctor)
+                _buildTranscriptionOverlay(),
             ],
           );
         },
@@ -76,9 +83,7 @@ class _VideoCallPageState extends State<VideoCallPage> {
       right: _localVideoPosition.dx,
       child: GestureDetector(
         onPanStart: (details) {
-          setState(() {
-            _isDraggingLocalVideo = true;
-          });
+          // Drag started
         },
         onPanUpdate: (details) {
           setState(() {
@@ -89,9 +94,7 @@ class _VideoCallPageState extends State<VideoCallPage> {
           });
         },
         onPanEnd: (details) {
-          setState(() {
-            _isDraggingLocalVideo = false;
-          });
+          // Drag ended
         },
         child: const SizedBox(
           width: 120,
@@ -145,18 +148,22 @@ class _VideoCallPageState extends State<VideoCallPage> {
           // Open chat
         },
         onEndCall: () async {
+          // Capture the bloc and navigator before the async gap
+          final bloc = context.read<VideoCallBloc>();
+          final navigator = Navigator.of(context);
+          
           // Show confirmation dialog
           final shouldEndCall = await showDialog<bool>(
             context: context,
-            builder: (context) => const EndCallConfirmationDialog(),
+            builder: (dialogContext) => const EndCallConfirmationDialog(),
           );
           
           if (shouldEndCall == true) {
             // End call
-            context.read<VideoCallBloc>().add(const VideoCallEndRequested());
+            bloc.add(const VideoCallEndRequested());
             // Navigate back
-            if (context.mounted) {
-              Navigator.of(context).pop();
+            if (mounted) {
+              navigator.pop();
             }
           }
         },
@@ -174,5 +181,22 @@ class _VideoCallPageState extends State<VideoCallPage> {
     }
     
     return const SizedBox.shrink();
+  }
+
+  Widget _buildTranscriptionOverlay() {
+    return Positioned(
+      bottom: 120,
+      left: 0,
+      right: 0,
+      child: InCallTranscriptionWidget(
+        isExpanded: _isTranscriptionExpanded,
+        onToggleExpand: () {
+          setState(() {
+            _isTranscriptionExpanded = !_isTranscriptionExpanded;
+          });
+        },
+        isDoctor: widget.isDoctor,
+      ),
+    );
   }
 }

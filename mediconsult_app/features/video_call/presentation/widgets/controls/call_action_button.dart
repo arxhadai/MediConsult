@@ -10,14 +10,14 @@ class CallActionButton extends StatelessWidget {
   final VoidCallback? onPressed;
 
   const CallActionButton({
-    Key? key,
+    super.key,
     required this.icon,
     this.activeIcon,
     required this.label,
     this.isActive = false,
     this.isDestructive = false,
     this.onPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

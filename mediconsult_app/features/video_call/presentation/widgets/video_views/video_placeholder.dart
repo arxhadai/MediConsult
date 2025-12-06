@@ -8,12 +8,12 @@ class VideoPlaceholder extends StatelessWidget {
   final double iconSize;
   
   const VideoPlaceholder({
-    Key? key,
+    super.key,
     this.title = 'No Video',
     this.icon = Icons.videocam_off,
     this.iconColor,
     this.iconSize = 48,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

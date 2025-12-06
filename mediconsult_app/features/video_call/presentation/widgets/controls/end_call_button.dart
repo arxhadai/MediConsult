@@ -6,10 +6,10 @@ class EndCallButton extends StatelessWidget {
   final double size;
   
   const EndCallButton({
-    Key? key,
+    super.key,
     this.onPressed,
     this.size = 56,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -7,11 +7,11 @@ class RemoteVideoView extends StatelessWidget {
   final bool isVisible;
   
   const RemoteVideoView({
-    Key? key,
+    super.key,
     required this.participantName,
     this.isConnected = false,
     this.isVisible = true,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
