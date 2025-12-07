@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import '../../../domain/entities/prescription.dart';
 
 /// Base class for all prescription list states
 abstract class PrescriptionListState extends Equatable {
@@ -16,7 +17,7 @@ class PrescriptionListLoading extends PrescriptionListState {}
 
 /// Loaded state with prescriptions
 class PrescriptionListLoaded extends PrescriptionListState {
-  final List<dynamic> prescriptions;
+  final List<Prescription> prescriptions;
 
   const PrescriptionListLoaded(this.prescriptions);
 

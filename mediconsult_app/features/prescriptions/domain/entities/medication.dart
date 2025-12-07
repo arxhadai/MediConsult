@@ -2,7 +2,6 @@ import 'package:equatable/equatable.dart';
 import '../enums/medication_frequency.dart';
 import '../enums/medication_timing.dart';
 import '../enums/medication_form.dart';
-import 'dosage.dart';
 
 /// Medication entity representing a prescribed medication
 class Medication extends Equatable {

@@ -72,7 +72,7 @@ class PrescriptionListBloc
         (failure) => emit(PrescriptionListError(failure.toString())),
         (_) {
           // Remove deleted prescription from list
-          final updatedPrescriptions = List<dynamic>.from(currentState.prescriptions)
+          final updatedPrescriptions = List<Prescription>.from(currentState.prescriptions)
             ..removeWhere((prescription) => prescription.id == event.prescriptionId);
           emit(PrescriptionListLoaded(updatedPrescriptions));
         },

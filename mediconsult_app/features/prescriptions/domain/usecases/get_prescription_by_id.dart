@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import '../../../../core/errors/failures.dart';
 import '../entities/prescription.dart';
 import '../repositories/prescription_repository.dart';
+import 'prescription_usecase.dart';
 
 /// Use case for getting a prescription by ID
 class GetPrescriptionById implements PrescriptionUseCase<Prescription, GetPrescriptionByIdParams> {

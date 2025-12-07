@@ -2,11 +2,8 @@ import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import '../../../../core/errors/failures.dart';
 import '../repositories/prescription_repository.dart';
-
-/// Base class for all prescription use cases
-abstract class PrescriptionUseCase<Type, Params> {
-  Future<Either<Failure, Type>> call(Params params);
-}
+import '../entities/prescription.dart';
+import 'prescription_usecase.dart';
 
 /// Use case for creating a prescription
 class CreatePrescription implements PrescriptionUseCase<Prescription, CreatePrescriptionParams> {

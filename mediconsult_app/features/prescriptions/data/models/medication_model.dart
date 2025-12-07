@@ -2,7 +2,6 @@ import '../../domain/entities/medication.dart';
 import '../../domain/enums/medication_frequency.dart';
 import '../../domain/enums/medication_timing.dart';
 import '../../domain/enums/medication_form.dart';
-import 'dosage_model.dart';
 
 /// Data model for Medication entity with JSON serialization
 class MedicationModel extends Medication {
@@ -21,7 +20,6 @@ class MedicationModel extends Medication {
     super.beforeFood = false,
     super.isSubstitutionAllowed = true,
     super.warnings,
-    super.sideEffects,
   });
 
   /// Create MedicationModel from JSON map
@@ -50,10 +48,8 @@ class MedicationModel extends Medication {
       quantity: json['quantity'] as int,
       instructions: json['instructions'] as String?,
       beforeFood: json['beforeFood'] as bool? ?? false,
-      isSubstitutionAllowed:
-          json['isSubstitutionAllowed'] as bool? ?? true,
+      isSubstitutionAllowed: json['isSubstitutionAllowed'] as bool? ?? true,
       warnings: json['warnings'] as String?,
-      sideEffects: json['sideEffects'] as String?,
     );
   }
 
@@ -74,7 +70,6 @@ class MedicationModel extends Medication {
       'beforeFood': beforeFood,
       'isSubstitutionAllowed': isSubstitutionAllowed,
       'warnings': warnings,
-      'sideEffects': sideEffects,
     };
   }
 }
