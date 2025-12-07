@@ -34,9 +34,8 @@ class AppointmentsRemoteDatasourceImpl implements AppointmentsRemoteDatasource {
           final json = <String, dynamic>{
             'id': doc.id,
           };
-          if (data is Map<String, dynamic>) {
-            json.addAll(data);
-          }
+          // ignore: unnecessary_null_comparison, unnecessary_cast
+                    json.addAll(data as Map<String, dynamic>);
           return AppointmentModel.fromJson(json);
         })
         .toList();
@@ -60,9 +59,8 @@ class AppointmentsRemoteDatasourceImpl implements AppointmentsRemoteDatasource {
           final json = <String, dynamic>{
             'id': doc.id,
           };
-          if (data != null) {
-            json.addAll(data as Map<String, dynamic>);
-          }
+          // ignore: unnecessary_null_comparison, unnecessary_cast
+                    json.addAll(data as Map<String, dynamic>);
           return AppointmentModel.fromJson(json);
         })
         .toList();
@@ -93,9 +91,8 @@ class AppointmentsRemoteDatasourceImpl implements AppointmentsRemoteDatasource {
           final json = <String, dynamic>{
             'id': doc.id,
           };
-          if (data is Map<String, dynamic>) {
-            json.addAll(data);
-          }
+          // ignore: unnecessary_null_comparison, unnecessary_cast
+                    json.addAll(data as Map<String, dynamic>);
           return AppointmentModel.fromJson(json);
         })
         .toList();
@@ -127,9 +124,8 @@ class AppointmentsRemoteDatasourceImpl implements AppointmentsRemoteDatasource {
           final json = <String, dynamic>{
             'doctorId': doc.id,
           };
-          if (data != null) {
-            json.addAll(data as Map<String, dynamic>);
-          }
+          // ignore: unnecessary_null_comparison, unnecessary_cast
+                    json.addAll(data as Map<String, dynamic>);
           return DoctorScheduleModel.fromJson(json);
         })
         .toList();
@@ -150,7 +146,8 @@ class AppointmentsRemoteDatasourceImpl implements AppointmentsRemoteDatasource {
     final json = <String, dynamic>{
       'doctorId': docSnapshot.id,
     };
-    json.addAll(data as Map<String, dynamic>);
+    // ignore: unnecessary_null_comparison, unnecessary_cast
+              json.addAll(data as Map<String, dynamic>);
     return DoctorScheduleModel.fromJson(json);
   }
 
