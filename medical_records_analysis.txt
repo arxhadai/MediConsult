@@ -1,0 +1,8 @@
+[info] 'groupValue' is deprecated and shouldn't be used. Use a RadioGroup ancestor to manage group value instead. This feature was deprecated after v3.32.0-0.0.pre (g:\projects\mediconsult\lib\features\medical_records\presentation\pages\share_records_page.dart:108:27)
+[info] 'onChanged' is deprecated and shouldn't be used. Use RadioGroup to handle value change instead. This feature was deprecated after v3.32.0-0.0.pre (g:\projects\mediconsult\lib\features\medical_records\presentation\pages\share_records_page.dart:109:27)
+[info] Use 'const' with the constructor to improve performance (g:\projects\mediconsult\lib\features\medical_records\presentation\widgets\vital_signs_chart.dart:36:12)
+[info] Use 'const' with the constructor to improve performance (g:\projects\mediconsult\lib\features\medical_records\presentation\widgets\vital_signs_chart.dart:37:14)
+[info] Use 'const' with the constructor to improve performance (g:\projects\mediconsult\lib\features\medical_records\presentation\widgets\vital_signs_input_form.dart:108:11)
+[info] Use 'const' with the constructor to improve performance (g:\projects\mediconsult\lib\features\medical_records\presentation\widgets\vital_signs_input_form.dart:126:17)
+[info] Use 'const' with the constructor to improve performance (g:\projects\mediconsult\lib\features\medical_records\presentation\widgets\vital_signs_input_form.dart:136:17)
+[info] Use 'const' with the constructor to improve performance (g:\projects\mediconsult\lib\features\medical_records\presentation\widgets\vital_signs_input_form.dart:160:11)

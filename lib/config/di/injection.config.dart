@@ -113,6 +113,40 @@ import 'package:mediconsult/features/auth/presentation/bloc/registration/registr
     as _i609;
 import 'package:mediconsult/features/consultation/domain/usecases/start_consultation_with_ai.dart'
     as _i532;
+import 'package:mediconsult/features/medical_records/data/datasources/medical_records_local_datasource.dart'
+    as _i540;
+import 'package:mediconsult/features/medical_records/data/datasources/medical_records_local_datasource_impl.dart'
+    as _i1002;
+import 'package:mediconsult/features/medical_records/data/datasources/medical_records_remote_datasource.dart'
+    as _i483;
+import 'package:mediconsult/features/medical_records/data/datasources/medical_records_remote_datasource_impl.dart'
+    as _i503;
+import 'package:mediconsult/features/medical_records/data/repositories/medical_records_repository_impl.dart'
+    as _i196;
+import 'package:mediconsult/features/medical_records/domain/repositories/medical_records_repository.dart'
+    as _i642;
+import 'package:mediconsult/features/medical_records/domain/usecases/delete_document.dart'
+    as _i261;
+import 'package:mediconsult/features/medical_records/domain/usecases/get_all_documents.dart'
+    as _i393;
+import 'package:mediconsult/features/medical_records/domain/usecases/get_documents_by_category.dart'
+    as _i371;
+import 'package:mediconsult/features/medical_records/domain/usecases/get_latest_vital_signs.dart'
+    as _i44;
+import 'package:mediconsult/features/medical_records/domain/usecases/get_vital_signs_history.dart'
+    as _i614;
+import 'package:mediconsult/features/medical_records/domain/usecases/record_vital_signs.dart'
+    as _i1066;
+import 'package:mediconsult/features/medical_records/domain/usecases/revoke_document_access.dart'
+    as _i931;
+import 'package:mediconsult/features/medical_records/domain/usecases/share_document_with_doctor.dart'
+    as _i1053;
+import 'package:mediconsult/features/medical_records/domain/usecases/upload_document.dart'
+    as _i944;
+import 'package:mediconsult/features/medical_records/presentation/bloc/medical_records/medical_records_bloc.dart'
+    as _i716;
+import 'package:mediconsult/features/medical_records/presentation/bloc/vital_signs/vital_signs_bloc.dart'
+    as _i519;
 import 'package:mediconsult/features/prescriptions/data/repositories/prescription_repository_impl.dart'
     as _i925;
 import 'package:mediconsult/features/prescriptions/domain/repositories/prescription_repository.dart'
@@ -206,6 +240,14 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i1051.GeminiAiServiceImpl(gh<String>()));
     gh.lazySingleton<_i297.AiRepository>(
         () => _i125.AiRepositoryImpl(gh<_i901.GeminiAiService>()));
+    gh.factory<_i716.MedicalRecordsBloc>(() => _i716.MedicalRecordsBloc(
+          getAllDocuments: gh<_i393.GetAllDocuments>(),
+          getDocumentsByCategory: gh<_i371.GetDocumentsByCategory>(),
+          uploadDocument: gh<_i944.UploadDocument>(),
+          deleteDocument: gh<_i261.DeleteDocument>(),
+          shareDocumentWithDoctor: gh<_i1053.ShareDocumentWithDoctor>(),
+          revokeDocumentAccess: gh<_i931.RevokeDocumentAccess>(),
+        ));
     gh.factory<_i957.AnalyzeSymptoms>(
         () => _i957.AnalyzeSymptoms(gh<_i297.AiRepository>()));
     gh.factory<_i51.CheckDrugInteractions>(
@@ -227,6 +269,14 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingletonAsync<_i584.AppointmentsLocalDatasource>(() async =>
         _i648.AppointmentsLocalDatasourceImpl(
             prefs: await getAsync<_i460.SharedPreferences>()));
+    gh.lazySingletonAsync<_i540.MedicalRecordsLocalDataSource>(() async =>
+        _i1002.MedicalRecordsLocalDataSourceImpl(
+            prefs: await getAsync<_i460.SharedPreferences>()));
+    gh.factory<_i519.VitalSignsBloc>(() => _i519.VitalSignsBloc(
+          recordVitalSigns: gh<_i1066.RecordVitalSigns>(),
+          getVitalSignsHistory: gh<_i614.GetVitalSignsHistory>(),
+          getLatestVitalSigns: gh<_i44.GetLatestVitalSigns>(),
+        ));
     gh.lazySingleton<_i387.AppointmentsRemoteDatasource>(() =>
         _i108.AppointmentsRemoteDatasourceImpl(
             firestore: gh<_i974.FirebaseFirestore>()));
@@ -236,6 +286,9 @@ extension GetItInjectableX on _i174.GetIt {
               firestore: gh<_i974.FirebaseFirestore>(),
               googleSignIn: gh<_i116.GoogleSignIn>(),
             ));
+    gh.lazySingleton<_i483.MedicalRecordsRemoteDataSource>(() =>
+        _i503.MedicalRecordsRemoteDataSourceImpl(
+            firestore: gh<_i974.FirebaseFirestore>()));
     gh.lazySingletonAsync<_i750.AuthLocalDatasource>(
         () async => _i372.AuthLocalDatasourceImpl(
               secureStorage: gh<_i558.FlutterSecureStorage>(),
@@ -292,6 +345,12 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i218.ToggleAudio(gh<_i279.VideoCallRepository>()));
     gh.factory<_i100.ToggleVideo>(
         () => _i100.ToggleVideo(gh<_i279.VideoCallRepository>()));
+    gh.lazySingletonAsync<_i642.MedicalRecordsRepository>(
+        () async => _i196.MedicalRecordsRepositoryImpl(
+              remoteDataSource: gh<_i483.MedicalRecordsRemoteDataSource>(),
+              localDataSource:
+                  await getAsync<_i540.MedicalRecordsLocalDataSource>(),
+            ));
     gh.factory<_i532.StartConsultationWithAI>(
         () => _i532.StartConsultationWithAI(
               gh<_i279.VideoCallRepository>(),
